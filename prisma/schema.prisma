@@ -1,0 +1,73 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite" // Ou PostgreSQL
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String       @id @default(uuid())
+  email            String       @unique
+  password         String       
+  role             Role         @default(PROFESSOR) // Peut maintenant être ADMIN, PROFESSOR ou INVIGILATOR
+  firstName        String
+  lastName         String
+  profilePicture   String?      // NOUVEAU : URL de la photo pour la validation visuelle
+  isFirstLogin     Boolean      @default(true) 
+  createdAt        DateTime     @default(now())
+  
+  // Relations
+  courses                   Course[]     @relation("ProfessorCourses")
+  attendancesAsProfessor    Attendance[] @relation("ProfessorAttendance")
+  attendancesValidated      Attendance[] @relation("InvigilatorAttendance") // NOUVEAU : Présences validées par ce surveillant
+}
+
+model Course {
+  id               String       @id @default(uuid())
+  title            String
+  description      String?
+  startTime        DateTime    
+  endTime          DateTime   
+  field_of_study   String       
+  
+  // Clés étrangères et Relations
+  professorId      String
+  professor        User         @relation("ProfessorCourses", fields: [professorId], references: [id])
+  attendances      Attendance[]
+}
+
+model Attendance {
+  id               String       @id @default(uuid())
+  scanTime         DateTime     @default(now()) 
+  status           Status       
+  
+  // Le professeur qui est présent
+  professorId      String
+  professor        User         @relation("ProfessorAttendance", fields: [professorId], references: [id])
+  
+  // Le surveillant qui a scanné le QR Code (NOUVEAU)
+  invigilatorId    String
+  invigilator      User         @relation("InvigilatorAttendance", fields: [invigilatorId], references: [id])
+  
+  courseId         String
+  course           Course       @relation(fields: [courseId], references: [id])
+
+  // Un prof ne peut être marqué présent qu'une seule fois par cours
+  @@unique([professorId, courseId]) 
+}
+
+// NOUVEAU : Ajout de INVIGILATOR
+enum Role {
+  ADMIN
+  PROFESSOR
+  INVIGILATOR 
+}
+
+enum Status {
+  ON_TIME
+  ABSENT
+}
