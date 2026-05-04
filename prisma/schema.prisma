@@ -64,7 +64,7 @@ model Attendance {
 enum Role {
   ADMIN
   PROFESSOR
-  INVIGILATOR 
+  SUPERVISOR 
 }
 
 enum Status {

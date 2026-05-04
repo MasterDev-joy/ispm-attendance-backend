@@ -64,3 +64,24 @@ export const changePassword = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Erreur lors de la mise à jour du mot de passe." });
   }
 };
+
+export const getMe = async (req: Request, res: Response) => {
+  const userId = (req as any).user.id;
+
+  try {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) return res.status(404).json({ error: "Utilisateur introuvable" });
+
+    res.json({
+      user: {
+        id: user.id,
+        role: user.role,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        isFirstLogin: user.isFirstLogin
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+};

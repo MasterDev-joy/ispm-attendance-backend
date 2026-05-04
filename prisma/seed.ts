@@ -49,7 +49,7 @@ async function main() {
       password,
       firstName: 'Marc',
       lastName: 'Vigil',
-      role: 'INVIGILATOR',
+      role: 'SUPERVISOR',
       isFirstLogin: true,
     },
   });
