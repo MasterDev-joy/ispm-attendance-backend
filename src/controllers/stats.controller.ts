@@ -32,7 +32,7 @@ export const getStats = async (req: Request, res: Response) => {
   try {
     switch (role) {
       case 'PROFESSOR':  return await _professorStats(res, userId, start, period);
-      case 'INVIGILATOR':return await _supervisorStats(res, userId, start, period);
+      case 'SUPERVISOR':return await _supervisorStats(res, userId, start, period);
       case 'ADMIN':      return await _adminStats(res, start, period);
       default:           return res.status(403).json({ error: 'Accès refusé' });
     }

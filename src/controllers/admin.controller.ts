@@ -59,8 +59,8 @@ export const createUser = async (req: Request, res: Response) => {
 
   const roleMap: Record<string, any> = {
     professor:  'PROFESSOR',
-    supervisor: 'INVIGILATOR',
-    superviseur:'INVIGILATOR',
+    supervisor: 'SUPERVISOR',
+    superviseur:'SUPERVISOR',
   };
 
   const prismaRole = roleMap[role.toLowerCase()];

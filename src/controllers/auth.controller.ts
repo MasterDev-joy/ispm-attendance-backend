@@ -33,6 +33,7 @@ export const login = async (req: Request, res: Response) => {
         role: user.role,
         firstName: user.firstName,
         lastName: user.lastName,
+        email: user.email,
         isFirstLogin: user.isFirstLogin // Pour forcer le changement au premier login [cite: 11, 37]
       }
     });
@@ -78,6 +79,7 @@ export const getMe = async (req: Request, res: Response) => {
         role: user.role,
         firstName: user.firstName,
         lastName: user.lastName,
+        email: user.email,
         isFirstLogin: user.isFirstLogin
       }
     });

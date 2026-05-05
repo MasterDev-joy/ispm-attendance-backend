@@ -23,7 +23,7 @@ model User {
   // Relations
   courses                   Course[]     @relation("ProfessorCourses")
   attendancesAsProfessor    Attendance[] @relation("ProfessorAttendance")
-  attendancesValidated      Attendance[] @relation("InvigilatorAttendance") // NOUVEAU : Présences validées par ce surveillant
+  attendancesValidated      Attendance[] @relation("SupervisorAttendance")
 }
 
 model Course {
@@ -50,8 +50,8 @@ model Attendance {
   professor        User         @relation("ProfessorAttendance", fields: [professorId], references: [id])
   
   // Le surveillant qui a scanné le QR Code (NOUVEAU)
-  invigilatorId    String
-  invigilator      User         @relation("InvigilatorAttendance", fields: [invigilatorId], references: [id])
+  supervisorId     String
+  supervisor       User         @relation("SupervisorAttendance", fields: [supervisorId], references: [id])
   
   courseId         String
   course           Course       @relation(fields: [courseId], references: [id])
@@ -60,7 +60,7 @@ model Attendance {
   @@unique([professorId, courseId]) 
 }
 
-// NOUVEAU : Ajout de INVIGILATOR
+// NOUVEAU : Ajout de SUPERVISOR
 enum Role {
   ADMIN
   PROFESSOR
